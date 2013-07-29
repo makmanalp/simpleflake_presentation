@@ -1,0 +1,7 @@
+digraph g{
+  d1 -> b [label="1,2,3,4,5..."]
+
+  b [label="App",shape=box,fillcolor="palegreen",style="filled,rounded"];
+
+  d1 [label="DB",shape=ellipse,style="filled"];
+}

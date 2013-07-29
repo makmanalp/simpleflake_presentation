@@ -1,0 +1,13 @@
+digraph g{
+  d1 -> b [label="57?"]
+  d2 -> b [label="42?"]
+  d3-> b [label="wat?"]
+  d4-> b [label="392?"]
+
+  b [label="App",shape=box,fillcolor="palegreen",style="filled,rounded"];
+
+  d1 [label="DB",shape=ellipse,style="filled"];
+  d2 [label="DB",shape=ellipse,style="filled"];
+  d3 [label="DB",shape=ellipse,style="filled"];
+  d4 [label="DB",shape=ellipse,style="filled"];
+}

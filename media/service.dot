@@ -1,0 +1,29 @@
+digraph g {
+    size="300,300";fixedsize="true"
+
+  b [label="App",shape=box,fillcolor="palegreen",style="filled,rounded"];
+
+  s1 [label="Srv",shape=box,fillcolor="lightblue",style="filled,rounded"];
+
+  d1 [label="DB",shape=ellipse,style="filled"];
+  d2 [label="DB",shape=ellipse,style="filled"];
+  d3 [label="DB",shape=ellipse,style="filled"];
+  d4 [label="DB",shape=ellipse,style="filled"];
+
+  d1 -> b
+  d2 -> b
+  d3 -> b
+  d4 -> b
+
+  s1 -> b [label="1,2,3"]
+  b -> s1
+
+
+  subgraph{
+    rank=same;d1;d2;d3;d4
+  }
+  subgraph{
+    rank=same;s1;b
+  }
+
+}

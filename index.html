@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/serif.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+    <style>
+        .reveal pre {
+            box-shadow: none;
+        }
+        .reveal section img {
+            border: 1px solid gray;
+        }
+    </style>
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>Simpleflake</h1>
+                    <br/>
+                    <h3>Distributed ID generation<br/>for the lazy</h3>
+					<p>
+						<small>Created by <a href="http://akmanalp.com">Mali Akmanalp</a> / <a href="http://twitter.com/makmanalp">@makmanalp</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Me</h2>
+                    <img src="media/mali.jpg" alt="Mali Akmanalp"/>
+                    <p>
+                    Mali Akmanalp <br/>
+                    <small>
+                        Platform / Data Engineer <br/>
+                        @<a href="http://custommade.com/">Custommade</a>
+                    </small>
+                    </p>
+				</section>
+
+				<section>
+                    <h2>Unique IDs.</h2>
+                    <p>Simple, right?</p>
+				</section>
+
+				<section>
+                    <h2>Need to tell things apart</h2>
+                    <img src="media/allthethings.png" alt="Unique ID all the things!"/>
+				</section>
+
+				<section>
+                    <h2>Autogeneration</h2>
+                    <pre style="margin-left:auto; margin-right: auto; width: 40%">
+                    <code style="">
+CREATE TABLE kittens (
+    `id` BIGINT AUTO_INCREMENT,
+    PRIMARY KEY(`id`)
+);
+                    </code>
+                    </pre>
+				</section>
+
+				<section>
+                    <h2>Normal</h2>
+                    <img src="media/unsharded.png" alt="unsharded"/>
+                    <p class="fragment">But when you start getting more data ... </p>
+				</section>
+
+				<section>
+                    <h2>Sharded</h2>
+                    <img src="media/sharded.png" alt="sharded"/>
+				</section>
+
+				<section>
+                    <h2>Coordination</h2>
+                    <img src="media/shardedtalk.png" alt="sharded"/>
+                    <p class="fragment">But now all your nodes have to wait on each other!</p>
+				</section>
+
+				<section>
+                    <h2>Ticket Server</h2>
+                    <small>a la Flickr</small><br/>
+                    <img src="media/service.png" alt="sharded"/>
+                    <p class="fragment">Network chattiness</p>
+                    <p class="fragment">More infrastructure</p>
+				</section>
+
+				<section>
+                    <h2>
+                        There is<br/>
+                        another way...
+                    </h2>
+				</section>
+
+				<section>
+                    <h2>Large</h2>
+                    <h2>Random</h2>
+                    <h2>Numbers!</h2>
+                    <img src="http://imgs.xkcd.com/comics/random_number.png"/>
+				</section>
+
+				<section>
+					<h2>UUID v4</h2>
+                    128 bit random number
+                    <pre style="margin-left:auto; margin-right: auto; width: 50%">
+                    <code style="">
+>>> import uuid
+>>> print uuid.uuid4()
+8da4b635-62f2-4de5-8097-0b0d4637cd7c
+                    </code>
+                    </pre>
+                    <p class="fragment">but ...</p>
+				</section>
+
+				<section>
+                    <h2>B-Tree + Random == Bad</h2>
+                    <p>
+                    asdasd
+                    </p>
+				</section>
+
+
+				<section>
+					<h2>UUID v1</h2>
+                    <pre style="text-align: center">236abc75-f7e5-11e2-bc8a-b88d1204f9a2</pre>
+                    <p>Number of 100-nanosecond intervals since the adoption of the Gregorian calendar in the West.</p>
+                    <img class="fragment" src="http://cdn.memegenerator.net/instances/400x/13582111.jpg"/>
+				</section>
+
+				<section>
+					<h2>UUID v1</h2>
+                    <pre style="text-align: center">236abc75-f7e5-11e2-bc8a-b88d1204f9a2</pre>
+                    <ul>
+                        <li>Timestamp backwards, no ordering</li>
+                        <li>Are strings</li>
+                        <li>Wasted bits for UUID version, dashes</li>
+                        <li>Are huge (128 bits)</li>
+                        <li>Don't fit in BIGINT</li>
+                    <ul>
+				</section>
+
+				<section>
+					<h2>Snowflake</h2>
+                    <pre style="text-align: center">10765432100123456789</pre>
+                    <ul>
+                        <li>Timestamp + Machine ID + Sequence Number</li>
+                        <li>Unique</li>
+                        <li>Time-ordered</li>
+                        <li>No coordination</li>
+                        <li>Not huge (64 bits)</li>
+                    <ul>
+				</section>
+
+				<section>
+					<h2>Snowflake</h2>
+                    <ul>
+                        <li>JVM / Scala</li>
+                        <li>Zookeeper</li>
+                        <li>Thrift</li>
+                    <ul>
+				</section>
+
+                <section>
+                    <h2>Startup life</h2>
+                    <!--<img src="http://25.media.tumblr.com/68c345f1218c875fba4fdd5ae8a92686/tumblr_mmlutiHXbE1sqaq38o1_500.jpg"/>-->
+                    <img src="http://24.media.tumblr.com/6d7e335838478954ba43a46429c4cd40/tumblr_mgzv6mg4hF1ryxmgwo1_500.gif"/>
+                    <p>
+                    I'm pretty sure our ops guy Wes time travels to handle what's already on his plate.
+                    </p>
+                </section>
+
+				<section>
+					<h2>OMG Collisions!</h2>
+                    Chances you'll get 
+                    <ul>
+                        <li>1000 * 140 bytes / second * 1 day</li>
+                    <ul>
+				</section>
+
+				<section>
+					<h2>Collisions pt. 2</h2>
+                    <img src="http://www.giantfreakinrobot.com/wp-content/uploads/2011/09/Highlander.jpg"/>
+                    <ul>
+                        <li>1000 * 140 bytes / second * 1 day</li>
+                        <li>= 11 GB</li>
+                        <li>= You better hire a DBA</li>
+                    <ul>
+				</section>
+
+				<section>
+					<h2>Features</h2>
+                    <ul>
+                        <li>Very simple == very fast</li>
+                        <li>No network delay</li>
+                        <li>No locking coordination</li>
+                        <li>No SPOF</li>
+                        <li>No state to keep track of</li>
+                    <ul>
+				</section>
+
+				<section>
+					<h2>Future?</h2>
+					<p>
+                        Totally backwards compatible with snowflake.
+					</p>
+				</section>
+
+                <section>
+                    <h2>There are other ways</h2>
+                    <ul>
+                        <li>Consistent hashing</li>
+                        <li>HiLo</li>
+                    </ul>
+                    <p>
+                        But they're a pain ...
+                    </p>
+                </section>
+
+				<section>
+					<h1>THE END</h1>
+					<h3>BY Hakim El Hattab / hakim.se</h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: 'serif',
+				transition: 'linear',
+
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
