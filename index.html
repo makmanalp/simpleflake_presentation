@@ -241,7 +241,7 @@ UUID('74691173-e69d-440d-8172-dd63c97d1e87')
 					<h2>Usage</h2>
                     <pre style="margin-left:auto; margin-right: auto; width: 75%">
                     <code style="">
->>> from simpleflake import simpleflake, parse_simpleflake
+>>> from simpleflake import simpleflake
 >>> simpleflake()
 3594162604452825250L
                     </code>
@@ -249,6 +249,7 @@ UUID('74691173-e69d-440d-8172-dd63c97d1e87')
                     Easy as pie
                     <pre style="margin-left:auto; margin-right: auto; width: 75%">
                     <code style="">
+>>> from simpleflake import parse_simpleflake
 >>> parse_simpleflake(3594162604452825250L)
 SimpleFlake(timestamp=1375160370.606, random_bits=6768802L)
                     </code>
