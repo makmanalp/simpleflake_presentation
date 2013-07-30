@@ -72,6 +72,7 @@
                     <h2>Unique IDs.</h2>
                     <p>Simple, right?</p>
                     <img src="http://24.media.tumblr.com/tumblr_m2jk09mdul1qz9s08o1_500.jpg" alt="kitten"/>
+                    <p class="fragment">let's say you have a database of silly cats ...</p>
 				</section>
 
                 <section>
@@ -82,6 +83,7 @@
 				<section>
                     <h2>Normal</h2>
                     <img src="media/unsharded.png" alt="unsharded"/>
+                    <p class="fragment">cat1, cat2, cat3 ...</p>
 				</section>
 
 				<section>
@@ -105,16 +107,16 @@ CREATE TABLE kittens (
 				<section>
                     <h2>Coordination</h2>
                     <img src="media/shardedtalk.png" alt="sharded"/>
-                    <p class="fragment">But now all your nodes have to wait on each other!</p>
+                    <p class="fragment">But now all your nodes have to talk<br/> to (and maybe wait on) each other!</p>
 				</section>
 
 				<section>
                     <h2>Ticket Server</h2>
                     <small>a la Flickr</small><br/>
                     <img src="media/service.png" alt="sharded"/>
-                    <p class="fragment">Still chatty</p>
+                    <p class="fragment">Still goes over the net</p>
                     <p class="fragment">More infrastructure</p>
-                    <p class="fragment">SPOF</p>
+                    <p class="fragment">SPOF (kinda)</p>
 				</section>
 
 				<section>
@@ -258,7 +260,8 @@ SimpleFlake(timestamp=1375160370.606, random_bits=6768802L)
 
                 <section>
                     <section>
-                        <h2>OMG Collisions!</h2>
+                        <h2>Collisions!</h2>
+                        <img src="http://www.giantfreakinrobot.com/wp-content/uploads/2011/09/Highlander.jpg"/>
                         <br/>
                         <p>Chances of collision at 100 inserts / sec.</p>
                         <br/>
@@ -266,7 +269,7 @@ SimpleFlake(timestamp=1375160370.606, random_bits=6768802L)
                     </section>
 
                     <section>
-                        <h2>OMG Collisions!</h2>
+                        <h2>Collisions!</h2>
                         <br/>
                         <p>At avg. 100 inserts / second, chances you'll get at least two in the same millisecond:</p>
                         <br/>
@@ -275,7 +278,7 @@ SimpleFlake(timestamp=1375160370.606, random_bits=6768802L)
                     </section>
 
                     <section>
-                        <h2>OMG Collisions!</h2>
+                        <h2>Collisions!</h2>
                         <br/>
                         <p>For two requests in the same millisecond, chances you'll get the same number out of 2^23:</p>
                         <br/>
@@ -284,8 +287,7 @@ SimpleFlake(timestamp=1375160370.606, random_bits=6768802L)
                     </section>
 
                     <section>
-                        <h2>Collisions pt. 2</h2>
-                        <img src="http://www.giantfreakinrobot.com/wp-content/uploads/2011/09/Highlander.jpg"/>
+                        <h2>Even more collisions!</h2>
                         <ul>
                             <li>(100 * 300 bytes) / second * 1 day</li>
                             <li>= 2.6 GB / day</li>
