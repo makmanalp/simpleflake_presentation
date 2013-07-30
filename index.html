@@ -150,7 +150,8 @@ UUID('74691173-e69d-440d-8172-dd63c97d1e87')
 
 				<section>
                     <h2>B-Tree + Random == Bad</h2>
-                    <br/>
+                    <img class="fragment" src="http://jcole.us/blog/files/innodb/20130109/72dpi/B_Tree_Structure.png"/>
+                    <small>http://blog.jcole.us/2013/01/10/btree-index-structures-in-innodb/</small>
                     <small class="fragment">wish there was a timestamp based UUID ...</small>
 				</section>
 
@@ -167,6 +168,7 @@ UUID('74691173-e69d-440d-8172-dd63c97d1e87')
 				<section>
 					<h2>UUID v1</h2>
                     <pre style="text-align: center">236abc75-f7e5-<span style="color:red">1</span><span style="color:blue">1e2</span>-bc8a-b88d1204f9a2</pre>
+                    <pre style="text-align: center"> 3    2      1                </pre>
                     <ul>
                         <li>Timestamp backwards, no ordering</li>
                         <li>Are strings</li>
