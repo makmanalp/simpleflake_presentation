@@ -71,11 +71,17 @@
 				<section>
                     <h2>Unique IDs.</h2>
                     <p>Simple, right?</p>
+                    <img src="http://24.media.tumblr.com/tumblr_m2jk09mdul1qz9s08o1_500.jpg" alt="kitten"/>
 				</section>
 
-				<section>
-                    <h2>Need to tell things apart</h2>
+                <section>
+                    <h2>Need to tell cats apart</h2>
                     <img src="media/allthethings.png" alt="Unique ID all the things!"/>
+                </section>
+
+				<section>
+                    <h2>Normal</h2>
+                    <img src="media/unsharded.png" alt="unsharded"/>
 				</section>
 
 				<section>
@@ -88,11 +94,6 @@ CREATE TABLE kittens (
 );
                     </code>
                     </pre>
-				</section>
-
-				<section>
-                    <h2>Normal</h2>
-                    <img src="media/unsharded.png" alt="unsharded"/>
                     <p class="fragment">But when you start getting more data ... </p>
 				</section>
 
@@ -111,14 +112,15 @@ CREATE TABLE kittens (
                     <h2>Ticket Server</h2>
                     <small>a la Flickr</small><br/>
                     <img src="media/service.png" alt="sharded"/>
-                    <p class="fragment">Network chattiness</p>
+                    <p class="fragment">Still chatty</p>
                     <p class="fragment">More infrastructure</p>
+                    <p class="fragment">SPOF</p>
 				</section>
 
 				<section>
                     <h2>
                         There is<br/>
-                        another way...
+                         a simpler way...
                     </h2>
 				</section>
 
@@ -132,53 +134,55 @@ CREATE TABLE kittens (
 				<section>
 					<h2>UUID v4</h2>
                     128 bit random number
-                    <pre style="margin-left:auto; margin-right: auto; width: 50%">
+                    <pre style="margin-left:auto; margin-right: auto; width: 55%">
                     <code style="">
 >>> import uuid
->>> print uuid.uuid4()
-8da4b635-62f2-4de5-8097-0b0d4637cd7c
+>>> uuid.uuid4()
+UUID('74691173-e69d-440d-8172-dd63c97d1e87')
                     </code>
                     </pre>
+                    <p class="fragment">standard</p>
+                    <p class="fragment">great language / db support</p>
                     <p class="fragment">but ...</p>
 				</section>
 
 				<section>
                     <h2>B-Tree + Random == Bad</h2>
-                    <p>
-                    asdasd
-                    </p>
+                    <br/>
+                    <small class="fragment">wish there was a timestamp based UUID ...</small>
 				</section>
 
 
 				<section>
 					<h2>UUID v1</h2>
-                    <pre style="text-align: center">236abc75-f7e5-11e2-bc8a-b88d1204f9a2</pre>
+                    <pre style="text-align: center"><span style="color:blue">236abc75-f7e5-11e2</span>-bc8a-b88d1204f9a2</pre>
                     <p>Number of 100-nanosecond intervals since the adoption of the Gregorian calendar in the West.</p>
                     <img class="fragment" src="http://cdn.memegenerator.net/instances/400x/13582111.jpg"/>
+                    <br/>
+                    <small class="fragment">and besides ... </small>
 				</section>
 
 				<section>
 					<h2>UUID v1</h2>
-                    <pre style="text-align: center">236abc75-f7e5-11e2-bc8a-b88d1204f9a2</pre>
+                    <pre style="text-align: center">236abc75-f7e5-<span style="color:red">1</span><span style="color:blue">1e2</span>-bc8a-b88d1204f9a2</pre>
                     <ul>
                         <li>Timestamp backwards, no ordering</li>
                         <li>Are strings</li>
                         <li>Wasted bits for UUID version, dashes</li>
                         <li>Are huge (128 bits)</li>
                         <li>Don't fit in BIGINT</li>
-                    <ul>
+                    </ul>
 				</section>
 
 				<section>
 					<h2>Snowflake</h2>
                     <pre style="text-align: center">10765432100123456789</pre>
+                    <pre style="text-align: center">Timestamp + Machine ID + Sequence Number</pre>
                     <ul>
-                        <li>Timestamp + Machine ID + Sequence Number</li>
-                        <li>Unique</li>
                         <li>Time-ordered</li>
-                        <li>No coordination</li>
+                        <li>No coordination during generation</li>
                         <li>Not huge (64 bits)</li>
-                    <ul>
+                    </ul>
 				</section>
 
 				<section>
@@ -187,7 +191,10 @@ CREATE TABLE kittens (
                         <li>JVM / Scala</li>
                         <li>Zookeeper</li>
                         <li>Thrift</li>
-                    <ul>
+                    </ul>
+                    <br/>
+                    <br/>
+                    <p class="fragment">more infrastructure ...</p>
 				</section>
 
                 <section>
@@ -200,21 +207,23 @@ CREATE TABLE kittens (
                 </section>
 
 				<section>
-					<h2>OMG Collisions!</h2>
-                    Chances you'll get 
-                    <ul>
-                        <li>1000 * 140 bytes / second * 1 day</li>
-                    <ul>
+                    <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Benjamin_D._Maxham_-_Henry_David_Thoreau_-_Restored.jpg/358px-Benjamin_D._Maxham_-_Henry_David_Thoreau_-_Restored.jpg" alt="Thoreau"/>
+                    <blockquote citation="Foo">
+                        Simplify, simplify, simplify your ID generation scheme.
+                    </blockquote>
+                    <small> -- Thoreau</small>
 				</section>
 
 				<section>
-					<h2>Collisions pt. 2</h2>
-                    <img src="http://www.giantfreakinrobot.com/wp-content/uploads/2011/09/Highlander.jpg"/>
+                    <h2><strong>Simple</strong>flake</h2>
+                    <pre style="text-align: center">10765432100123456789</pre>
+                    <pre style="text-align: center">Timestamp (41b) + Random Number (23b)</pre>
                     <ul>
-                        <li>1000 * 140 bytes / second * 1 day</li>
-                        <li>= 11 GB</li>
-                        <li>= You better hire a DBA</li>
-                    <ul>
+                        <li>Snowflake knockoff</li>
+                        <li>Time-ordered</li>
+                        <li>No coordination during generation</li>
+                        <li>Not huge (64 bits)</li>
+                    </ul>
 				</section>
 
 				<section>
@@ -229,6 +238,63 @@ CREATE TABLE kittens (
 				</section>
 
 				<section>
+					<h2>Usage</h2>
+                    <pre style="margin-left:auto; margin-right: auto; width: 75%">
+                    <code style="">
+>>> from simpleflake import simpleflake, parse_simpleflake
+>>> simpleflake()
+3594162604452825250L
+                    </code>
+                    </pre>
+                    Easy as pie
+                    <pre style="margin-left:auto; margin-right: auto; width: 75%">
+                    <code style="">
+>>> parse_simpleflake(3594162604452825250L)
+SimpleFlake(timestamp=1375160370.606, random_bits=6768802L)
+                    </code>
+                    </pre>
+				</section>
+
+                <section>
+                    <section>
+                        <h2>OMG Collisions!</h2>
+                        <br/>
+                        <p>Chances of collision at 100 inserts / sec.</p>
+                        <br/>
+                        <code>1.0787 x 10^-9</code>
+                    </section>
+
+                    <section>
+                        <h2>OMG Collisions!</h2>
+                        <br/>
+                        <p>At avg. 100 inserts / second, chances you'll get at least two in the same millisecond:</p>
+                        <br/>
+                        <code>PDF[PoissonDistribution[0.1], 2]<br/>
+                            = 0.00452419</code>
+                    </section>
+
+                    <section>
+                        <h2>OMG Collisions!</h2>
+                        <br/>
+                        <p>For two requests in the same millisecond, chances you'll get the same number out of 2^23:</p>
+                        <br/>
+                        <code>n^2/2m = (2)^2/(2*2^23) <br/>
+                            = 2.3842 × 10^-7</code>
+                    </section>
+
+                    <section>
+                        <h2>Collisions pt. 2</h2>
+                        <img src="http://www.giantfreakinrobot.com/wp-content/uploads/2011/09/Highlander.jpg"/>
+                        <ul>
+                            <li>(100 * 300 bytes) / second * 1 day</li>
+                            <li>= 2.6 GB / day</li>
+                            <li>= 1 TB / year</li>
+                            <li>= You better hire a DBA</li>
+                            <ul>
+                            </section>
+                        </section>
+
+				<section>
 					<h2>Future?</h2>
 					<p>
                         Totally backwards compatible with snowflake.
@@ -236,20 +302,21 @@ CREATE TABLE kittens (
 				</section>
 
                 <section>
-                    <h2>There are other ways</h2>
-                    <ul>
-                        <li>Consistent hashing</li>
-                        <li>HiLo</li>
-                    </ul>
-                    <p>
+                    <section>
+                        <h1>The End!</h1>
+                    </section>
+                    <section>
+                        <h2>There are other ways</h2>
+                        <ul>
+                            <li>Consistent hashing</li>
+                            <li>HiLo</li>
+                        </ul>
+                        <p>
                         But they're a pain ...
-                    </p>
+                        </p>
+                    </section>
                 </section>
 
-				<section>
-					<h1>THE END</h1>
-					<h3>BY Hakim El Hattab / hakim.se</h3>
-				</section>
 
 			</div>
 
